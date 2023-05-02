@@ -1,19 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
 import cv2
 import image_dehazer
 import os
 import numpy as np
 
-
-app = Flask(__name__)
-
-# Set the maximum file size for the uploaded image to 16 MB
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-
-
-@app.route('/dehaze', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
+def main():
         # Check if the user uploaded an image file
         if 'image' not in request.files:
             return redirect(request.url)
@@ -36,13 +26,8 @@ def index():
         HazeCorrectedImg, haze_map = image_dehazer.remove_haze(image, showHazeTransmissionMap=False)
 
         # Save the output image to a file
-        output_path = "static/outputImages/result.png"
+        output_path = "outputImages/result.png"
         cv2.imwrite(output_path, HazeCorrectedImg)
 
         # Get the URL for the output image
         image_url = os.path.join(app.static_url_path, "outputImages/result.jpg")
-
-        # Render the template with the output image URL
-        return render_template("index.html", image_url=image_url)
-    else:
-        return render_template("index.html")
