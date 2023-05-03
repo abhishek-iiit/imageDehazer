@@ -1,10 +1,7 @@
-import cv2
-import image_dehazer
-import os
-import numpy as np
 #importing the Libraries
+import image_dehazer
+import numpy as np
 import PIL                      # Python Imaging Library
-import pytesseract              # used for image to text conversion using OCR
 from tkinter import filedialog  # Used to provide GUI open/save feature
 from tkinter import *
 from PIL import Image,ImageTk   # used for handling image type file
@@ -28,19 +25,18 @@ message.place(x=150, y=170)
 def mainFunct():
         # provides a dialog box for asking file to open and returns it's path
         window.filename =  filedialog.askopenfilename()
-        image_file= PIL.Image.open(window.filename)  
-        
-        # Read input image
-        image = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), cv2.IMREAD_COLOR)
+        image_file= PIL.Image.open(window.filename)
+        img = np.array(image_file)
         
         # Remove haze from image
-        HazeCorrectedImg, haze_map = image_dehazer.remove_haze(image, showHazeTransmissionMap=False)
+        HazeCorrectedImg, haze_map = image_dehazer.remove_haze(img, showHazeTransmissionMap=False)
+        output_image = Image.fromarray(HazeCorrectedImg)
                 
         #Open video to save file
         window.filename =  filedialog.asksaveasfilename()
-        HazeCorrectedImg.save(window.filename+ '.png')
-        HazeCorrectedImg = "Saved"
-        message.configure(text= HazeCorrectedImg)
+        output_image.save(window.filename+ '.jpg')
+        Saved_Image = "Saved"
+        message.configure(text= Saved_Image)
 
 #Defining the buttons
 funct = Button(window, text="ImageDehazer", command=mainFunct  ,fg="red"  ,bg="white"  ,width=20  ,height=3, activebackground = "grey" ,font=('Helvetica', 15 , ' bold '))
