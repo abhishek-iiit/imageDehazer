@@ -37,6 +37,7 @@ def mainFunct():
         output_image.save(window.filename+ '.jpg')
         Saved_Image = "Saved"
         message.configure(text= Saved_Image)
+        output_image.show()
 
 #Defining the buttons
 funct = Button(window, text="ImageDehazer", command=mainFunct  ,fg="red"  ,bg="white"  ,width=20  ,height=3, activebackground = "grey" ,font=('Helvetica', 15 , ' bold '))
